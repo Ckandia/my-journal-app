@@ -1,5 +1,7 @@
 # Virtual hook: "opposite" mode (October 2026)
 
+- **Update:** the two-paper-wins rule is SUSPENDED. Opposite mode is the only active rule: no dropdown, no confirmations field, and the engine defaults to it. The old rule remains in code (`virtual_mode: 'confirm'`) and tests, not selectable in the UI.
+
 - New field `virtual_mode` on the AI config and a dropdown under the Virtual hook checkbox on the AI Trader tab:
   **Buy the opposite after a paper loss** (new default) or **Wait for paper wins in a row** (the old rule, unchanged).
 - Opposite mode: after a real loss the AI paper-trades the contract it wants next. The moment a paper trade LOSES, the

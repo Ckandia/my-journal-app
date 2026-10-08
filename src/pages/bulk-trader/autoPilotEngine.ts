@@ -67,10 +67,10 @@ export type TAutoPilotConfig = {
     virtual_confirmations?: number;
     /**
      * What the hook does with its paper results.
-     * 'opposite' (default): the contract is paper-traded; the moment a paper trade LOSES, the OPPOSITE contract (Even<->Odd,
+     * 'opposite' (default, the active rule): the contract is paper-traded; the moment a paper trade LOSES, the OPPOSITE contract (Even<->Odd,
      * Over 4<->Under 5, Rise<->Fall, Touch<->No Touch) is bought for real on the same market. If that real trade loses, the
      * hook starts again, and so on. Paper wins just keep paper-trading.
-     * 'confirm': the older rule, `virtual_confirmations` paper wins in a row, then the same contract is traded for real.
+     * 'confirm': the older rule, SUSPENDED (kept in code and tests, not selectable in the UI), `virtual_confirmations` paper wins in a row, then the same contract is traded for real.
      */
     virtual_mode?: 'opposite' | 'confirm';
 };
@@ -648,7 +648,7 @@ export class AutoPilotEngine {
     private async _virtualHook(first: TCandidate, resume_stake: number) {
         this.busy = true; // nothing else may place a real trade meanwhile
         const needed = Math.min(MAX_VIRTUAL_CONFIRMATIONS, Math.max(1, Math.floor(this.config.virtual_confirmations ?? DEFAULT_VIRTUAL_CONFIRMATIONS)));
-        const opposite_mode = (this.config.virtual_mode ?? 'confirm') === 'opposite';
+        const opposite_mode = (this.config.virtual_mode ?? 'opposite') === 'opposite';
         this.hooks?.onLog?.(
             'info',
             opposite_mode
